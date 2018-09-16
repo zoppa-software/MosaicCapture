@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{9baefb1f-c31a-4caa-9098-8ca50c3cd2a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{dd4d2a19-912d-4b8c-b51f-d990e76e840f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Brush">
+      <UniqueIdentifier>{86f4b79b-e773-46e7-b36f-8dc16805cc0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Geometry">
+      <UniqueIdentifier>{dc249e65-ea94-4a61-a4e6-c2856f3bb2ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Text">
+      <UniqueIdentifier>{9868cb57-374b-49f8-8587-36c7b5ec5090}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Figure">
+      <UniqueIdentifier>{9a3b79ee-1618-4682-85bd-4b29283b930f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Bitmap">
+      <UniqueIdentifier>{bf7e086e-a9f6-4646-96c4-d0aec43df39c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enum">
+      <UniqueIdentifier>{8eae3c84-3518-4aae-ad1e-75cc5f9075ab}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualTeeControl.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualResource.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualResources.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualRenderEventArgs.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualRenderTarget.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualResourceEntity.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualResourceEventArgs.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualResourceOfSolidColorBrush.h">
+      <Filter>Resource\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualResourceOfRadialGradientBrush.h">
+      <Filter>Resource\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualResourceOfBitmapBrush.h">
+      <Filter>Resource\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualResourceOfPathGeometry.h">
+      <Filter>Resource\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualResourceOfTextFormat.h">
+      <Filter>Resource\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellipse.h">
+      <Filter>Figure</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualResourceOfLineGradientBrush.h">
+      <Filter>Resource\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualResourceOfStrokeStyle.h">
+      <Filter>Resource\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualResourceOfBitmap.h">
+      <Filter>Resource\Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="CapStyle.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="AntialiasMode.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="DashStyle.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="LineJoin.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="BitmapInterpolationMode.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="ExtendModeParameter.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="GammaParameter.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="FigureBegin.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="FigureEnd.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="FillMode.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="OpacityMaskContent.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="DWriteFontStretch.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="DWriteFontStyle.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="DWriteFontWeight.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualLayer.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="LayerOptions.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualResourceOfRectangleGeometry.h">
+      <Filter>Resource\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="SweepDirection.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="ArcSize.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualResourceOfTransformedGeometry.h">
+      <Filter>Resource\Geometry</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AssemblyInfo.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="VisualTeeControl.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="VisualRenderTarget.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="VisualResourceEntity.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="VisualTree.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DwmForm.resx">
+      <Filter>リソース ファイル</Filter>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
