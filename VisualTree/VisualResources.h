@@ -7,11 +7,11 @@
 #include "VisualResource.h"
 #include "VisualResourceEntity.h"
 
-using namespace System;
-using namespace System::Collections::Generic;
-
 namespace VisualTree
 {
+    using namespace System;
+    using namespace System::Collections::Generic;
+
     /// <summary>リソース・コレクション。</summary>
 	public ref class VisualResources sealed
 	{

@@ -71,6 +71,9 @@ namespace MosaicCapture
             this.zoom = 100;
             this.thumbPos = new Point(-1, -1);
             this.szindex = 1;
+
+            this.DwmExtendFrameIntoClientArea(3, 3, 65, 40);
+            //this->DwmExtendFrameIntoClientArea(this->Handle, 3, 3, 65, 40);
         }
 
         #endregion
@@ -287,7 +290,7 @@ namespace MosaicCapture
                                14.0f,
                                new Point(this.Width - 200, this.Height - 20),
                                StringFormat.GenericDefault);
-                if (this.DwmIsCompositionEnabled()) {
+                if (this.DwmIsCompositionEnabled) {
                     for (int i = 1; i < 8; ++i) {
                         using (var pen = new Pen(Color.FromArgb(32, 255, 255, 255), i)) {
                             pen.LineJoin = System.Drawing.Drawing2D.LineJoin.Round;
@@ -322,7 +325,7 @@ namespace MosaicCapture
                                14.0f,
                                new Point((int)(25 + (45 - sz.Width) / 2), this.Height - 21),
                                StringFormat.GenericDefault);
-                if (this.DwmIsCompositionEnabled()) {
+                if (this.DwmIsCompositionEnabled) {
                     for (int i = 1; i < 8; ++i) {
                         using (var pen = new Pen(Color.FromArgb(32, 255, 255, 255), i)) {
                             pen.LineJoin = System.Drawing.Drawing2D.LineJoin.Round;

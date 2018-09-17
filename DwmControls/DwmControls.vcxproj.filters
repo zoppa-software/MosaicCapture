@@ -45,7 +45,7 @@
       <Filter>Dwm</Filter>
     </ClCompile>
     <ClCompile Include="DwmForm.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Dwm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

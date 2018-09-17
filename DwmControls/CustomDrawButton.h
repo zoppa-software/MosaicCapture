@@ -2,22 +2,20 @@
 
 #include <windows.h>
 
-using namespace System;
-using namespace System::ComponentModel;
-using namespace System::Diagnostics;
-using namespace System::Drawing;
-using namespace System::Runtime::InteropServices;
-using namespace System::Threading::Tasks;
-using namespace System::Windows::Forms;
-
 namespace Dwm
 {
+    using namespace System;
+    using namespace System::ComponentModel;
+    using namespace System::Diagnostics;
+    using namespace System::Drawing;
+    using namespace System::Runtime::InteropServices;
+    using namespace System::Threading::Tasks;
+    using namespace System::Windows::Forms;
+
     /// <summary>カスタム描画ボタンコントロール。</summary>
     public ref class CustomDrawButton
         : Control, IButtonControl
     {
-        #pragma region "fields"
-
     private:
         /// <summary>有効状態ブラシ。</summary>
         SolidBrush ^ enableColor;
@@ -42,10 +40,6 @@ namespace Dwm
 
         /// <summary>ボタン戻り値。</summary>
         System::Windows::Forms::DialogResult dialogResult;
-
-        #pragma endregion
-
-        #pragma region "fields"
 
     public:
         /// <summary>有効時のボタンの色を設定、取得する。</summary>
@@ -154,90 +148,23 @@ namespace Dwm
             }
         }
 
-
-       #pragma endregion
-
     public:
-        #pragma region "constructor"
-
         /// <summary>コンストラクタ。</summary>
         /// <remarks>
         /// インスタンスの初期化を行う。
         /// </remarks>
-        CustomDrawButton()
-        {
-            // リソースを設定
-            this->enableColor = gcnew SolidBrush(Color::DimGray);
-            this->notEnableColor = gcnew SolidBrush(Color::LightGray);
-            this->focusColorPen = gcnew Pen(Color::DimGray);
-            this->hoverColorPen = gcnew Pen(Color::LightGray, 1);
-            this->hoverBackColor = gcnew SolidBrush(Color::FromArgb(128, 255, 255, 255));
-            this->hoverFrontColor = gcnew SolidBrush(Color::DimGray);
-            this->hover = false;
-            this->DialogResult = System::Windows::Forms::DialogResult::None;
-
-            // ちらつき防止スタイルを設定
-            this->SetStyle(ControlStyles::DoubleBuffer |
-                           ControlStyles::UserPaint |
-                           ControlStyles::AllPaintingInWmPaint, true);
-        }
+        CustomDrawButton();
 
         /// <summary>デストラクタ。</summary>
-        virtual ~CustomDrawButton()
-        {
-            if (this->enableColor != nullptr) {
-                delete this->enableColor;
-                this->enableColor = nullptr;
-            }
-            if (this->notEnableColor != nullptr) {
-                delete notEnableColor;
-                this->notEnableColor = nullptr;
-            }
-            if (this->focusColorPen != nullptr) {
-                delete this->focusColorPen;
-                this->focusColorPen = nullptr;
-            }
-            if (this->hoverColorPen != nullptr) {
-                delete this->hoverColorPen;
-                this->hoverColorPen = nullptr;
-            }
-            if (this->hoverFrontColor != nullptr) {
-                delete this->hoverFrontColor;
-                this->hoverFrontColor = nullptr;
-            }
-            if (this->hoverBackColor != nullptr) {
-                delete this->hoverBackColor;
-                this->hoverBackColor = nullptr;
-            }
-        }
-
-        #pragma endregion
-
-        #pragma region "methods"
+        virtual ~CustomDrawButton();
 
     protected:
         /// <summary>コントロール押下処理を行う。</summary>
-        virtual void ButtonClick()
-        {
-            Control::OnClick(gcnew EventArgs());
-        }
-
-    private:
-        /// <summary>少し待ってボタンクリックを発行。</summary>
-        void SleepMilSecond()
-        {
-            System::Threading::Thread::Sleep(10);
-            this->Invoke(gcnew Action(this, &CustomDrawButton::ButtonClick));
-        }
+        virtual void ButtonClick();
 
     public:
         /// <summary>コントロールにフォーカスを与える。</summary>
-        void SetFocus()
-        {
-            if (this->IsHandleCreated) {
-                ::SetFocus((HWND)this->Handle.ToPointer());
-            }
-        }
+        void SetFocus();
 
     protected:
         //---------------------------------------------------------------------
@@ -245,67 +172,21 @@ namespace Dwm
         //---------------------------------------------------------------------
         /// <summary>背景色描画イベントハンドラ。</summary>
         /// <param name="pevent">イベント発行元。</param>
-        void OnPaintBackground(PaintEventArgs ^ pevent) override
-        {
-            Control::OnPaintBackground(pevent);
-        }
-
-        void OnSizeChanged(EventArgs ^ e) override
-        {
-            int a = 50;
-            Control::OnSizeChanged(e);
-        }
+        void OnPaintBackground(PaintEventArgs ^ pevent) override;
 
         /// <summary>描画イベントハンドラ。</summary>
         /// <param name="e">イベントオブジェクト。</param>
         /// <remarks>
         /// 画像、説明文の描画を行う。
         /// </remarks>
-        void OnPaint(PaintEventArgs ^ e) override
-        {
-            Control::OnPaint(e);
-
-            Graphics ^ g = e->Graphics;
-
-            // 有効、無効カラーを設定
-            SolidBrush ^ brh;
-            if (this->Enabled) {
-                brh = (this->hover ? this->hoverFrontColor : this->enableColor);
-            }
-            else {
-                brh = this->notEnableColor;
-            }
-            int lft = (this->ClientRectangle.Width - this->SquareLength) / 2;
-            int top = (this->ClientRectangle.Height - this->SquareLength) / 2;
-
-            // ホバー時背景を描画する
-            if (this->hover) {
-                g->FillRectangle(this->hoverBackColor, this->ClientRectangle);
-            }
-
-            // アイコンを描画する
-            this->DrawMethod(g, brh, lft, top);
-
-            // フォーカス／ホバー枠の描画を行う
-            if (this->Focused || this->hover) {
-                Pen ^ frmbrh = (this->Focused ? this->focusColorPen : this->hoverColorPen);
-                g->DrawRectangle(frmbrh,
-                                 this->ClientRectangle.X,
-                                 this->ClientRectangle.Y,
-                                 this->ClientRectangle.Width - 1,
-                                 this->ClientRectangle.Height - 1);
-            }
-        }
+        void OnPaint(PaintEventArgs ^ e) override;
 
         /// <summary>カスタム画像の描画を行う。</summary>
         /// <param name="g">グラフィックオブジェクト。</param>
         /// <param name="brh">描画ブラシ。</param>
         /// <param name="lft">左。</param>
         /// <param name="top">上。</param>
-        virtual void DrawMethod(Graphics ^ g, SolidBrush ^ brh, int lft, int top)
-        {
-            // 空実装
-        }
+        virtual void DrawMethod(Graphics ^ g, SolidBrush ^ brh, int lft, int top);
 
     public:
         //---------------------------------------------------------------------
@@ -313,21 +194,10 @@ namespace Dwm
         //---------------------------------------------------------------------
         /// <summary>コントロールに、それが既定のボタンであり、外観と動作が調整されていることが通知される。</summary>
         /// <param name="value">コントロールが既定のボタンとして動作する場合は true。それ以外の場合は false。</param>
-        virtual void NotifyDefault(bool value)
-        {
-            // 空実装
-        }
+        virtual void NotifyDefault(bool value);
 
         /// <summary>コントロールの Click イベントを生成します。</summary>
-        virtual void PerformClick()
-        {
-            // フォーカスを設定
-            ::SetFocus((HWND)this->Handle.ToPointer());
-
-            if (this->Enabled) {
-                this->ButtonClick();
-            }
-        }
+        virtual void PerformClick();
 
     protected:
         //---------------------------------------------------------------------
@@ -335,129 +205,55 @@ namespace Dwm
         //---------------------------------------------------------------------
         /// <summary>ロストフォーカスイベントハンドラ。</summary>
         /// <param name="e">イベントオブジェクト。</param>
-        void OnLostFocus(EventArgs ^ e) override
-        {
-            Control::OnLostFocus(e);
-            this->Invalidate();
-        }
+        void OnLostFocus(EventArgs ^ e) override;
 
         /// <summary>フォーカス取得イベントハンドラ。</summary>
         /// <param name="e">イベントオブジェクト。</param>
-        void OnGotFocus(EventArgs ^ e) override
-        {
-            Control::OnGotFocus(e);
-            this->Invalidate();
-        }
+        void OnGotFocus(EventArgs ^ e) override;
 
         /// <summary>キー押下イベントハンドラ（処理前）</summary>
         /// <param name="e">イベントオブジェクト。</param>
-        void OnPreviewKeyDown(PreviewKeyDownEventArgs ^ e) override
-        {
-            // 特殊なキーを処理するためフラグを設定
-            switch (e->KeyCode)
-            {
-            case Keys::Enter:
-                    e->IsInputKey = true;
-                    break;
-
-                default:
-                    Control::OnPreviewKeyDown(e);
-                    break;
-
-            }
-        }
+        void OnPreviewKeyDown(PreviewKeyDownEventArgs ^ e) override;
 
         /// <summary>キーダウンイベントハンドラ。</summary>
         /// <param name="e">イベントオブジェクト。</param>
-        void OnKeyDown(KeyEventArgs ^ e) override
-        {
-            Control::OnKeyDown(e);
-
-            switch (e->KeyCode)
-            {
-            case Keys::Enter:
-                this->ButtonClick();
-                break;
-            }
-        }
+        void OnKeyDown(KeyEventArgs ^ e) override;
 
         //---------------------------------------------------------------------
         // マウスイベント
         //---------------------------------------------------------------------
         /// <summary>マウス移動イベントハンドラ。</summary>
         /// <param name="e">イベントオブジェクト。</param>
-        void OnMouseMove(MouseEventArgs ^ e) override
-        {
-            Control::OnMouseMove(e);
-
-            if (this->Enabled) {
-                // 前回のホバー状態を記憶
-                bool oldf = this->hover;
-                this->hover = true;
-
-                // 前回と今回が異なるならば再描画
-                if (oldf != this->hover) {
-                    this->Invalidate();
-                }
-            }
-        }
+        void OnMouseMove(MouseEventArgs ^ e) override;
 
         /// <summary>マウスダウンイベントハンドラ。</summary>
         /// <param name="e">イベントオブジェクト。</param>
-        void OnMouseDown(MouseEventArgs ^ e) override
-        {
-            Control::OnMouseDown(e);
-
-            if (this->Enabled) {
-                // フォーカスを設定
-                ::SetFocus((HWND)this->Handle.ToPointer());
-
-                // 左クリックかつ画像領域内にマウスポインタがあるならば縮小表示
-                if (e->Button == System::Windows::Forms::MouseButtons::Left) {
-                    this->Invalidate();
-                }
-            }
-        }
+        void OnMouseDown(MouseEventArgs ^ e) override;
 
         /// <summary>マウスクリックイベントハンドラ。</summary>
         /// <param name="e">イベントオブジェクト。</param>
-        void OnMouseClick(MouseEventArgs ^ e) override
-        {
-            if (this->Enabled) {
-                this->Invalidate();
-                Task^ res = Task::Run(gcnew Action(this, &CustomDrawButton::SleepMilSecond));
-            }
-        }
+        void OnMouseClick(MouseEventArgs ^ e) override;
 
         /// <summary>マウスアップイベントハンドラ。</summary>
         /// <param name="e">イベントオブジェクト。</param>
-        void OnMouseUp(MouseEventArgs ^ e) override
-        {
-            Control::OnMouseUp(e);
-            this->Invalidate();
-        }
+        void OnMouseUp(MouseEventArgs ^ e) override;
 
         /// <summary>マウスリーブイベントハンドラ。</summary>
         /// <param name="e">イベントオブジェクト。</param>
-        void OnMouseLeave(EventArgs ^ e) override
-        {
-            Control::OnMouseLeave(e);
-
-            // 各フラグを消去して再描画
-            this->hover = false;
-            this->Invalidate();
-        }
+        void OnMouseLeave(EventArgs ^ e) override;
 
         /// <summary>クリックイベント。</summary>
         /// <param name="e">イベントオブジェクト。</param>
-        void OnClick(EventArgs ^ e) override
-        {
-            // 空実装
-        }
+        void OnClick(EventArgs ^ e) override;
 
-        #pragma endregion
+    private:
+        /// <summary>少し待ってボタンクリックを発行。</summary>
+        void WaitAMomentToButtonClick();
     };
 
+    #pragma region "「最小化」ボタン"
+
+    /// <summary>「最小化」ボタン。</summary>
     ref class MinimumButton
         : CustomDrawButton
     {
@@ -477,38 +273,30 @@ namespace Dwm
         /// <param name="brh">描画ブラシ。</param>
         /// <param name="lft">左。</param>
         /// <param name="top">上。</param>
-        void DrawMethod(Graphics ^ g, SolidBrush ^ brh, int lft, int top) override
-        {
-            g->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::None;
-
-            float scale = g->DpiX / 96.0f;
-            g->ScaleTransform(scale, scale);
-
-            g->FillRectangle(brh, lft, top + 7, 8, 3);
-        }
+        void DrawMethod(Graphics ^ g, SolidBrush ^ brh, int lft, int top) override;
     };
 
+    #pragma endregion
+
+    #pragma region "「最大化」ボタン"
+
+    /// <summary>「最大化」ボタン。</summary>
     ref class MaximumButton
         : CustomDrawButton
     {
     private:
+        // 親ウィンドウ
         Form ^ targetForm;
 
+        // 描画ペン
         Pen ^ pen;
 
     public:
-        MaximumButton()
-        {
-            this->pen = gcnew Pen(Color::Black, 1);
-        }
+        /// <summary>コンストラクタ。</summary>
+        MaximumButton();
 
-        ~MaximumButton()
-        {
-            if (this->pen != nullptr) {
-                delete this->pen;
-                this->pen = nullptr;
-            }
-        }
+        /// <summary>デストラクタ。</summary>
+        ~MaximumButton();
 
     public:
          /// <summary>アイコンの大きさを取得する。</summary>
@@ -526,58 +314,32 @@ namespace Dwm
         /// <param name="brh">描画ブラシ。</param>
         /// <param name="lft">左。</param>
         /// <param name="top">上。</param>
-        void DrawMethod(Graphics ^ g, SolidBrush ^ brh, int lft, int top) override
-        {
-            g->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::None;
+        void DrawMethod(Graphics ^ g, SolidBrush ^ brh, int lft, int top) override;
 
-            float scale = g->DpiX / 96.0f;
-            g->ScaleTransform(scale, scale);
-
-            FormWindowState state = this->targetForm != nullptr ? this->targetForm->WindowState : FormWindowState::Normal;
-            this->pen->Color = brh->Color;
-            switch (state)
-            {
-            case FormWindowState::Maximized:
-                g->FillRectangle(brh, lft, top + 3, 9, 2);
-                g->DrawRectangle(this->pen, lft, top + 5, 8, 5);
-
-                g->FillRectangle(brh, lft + 2, top, 9, 2);
-                g->DrawLine(this->pen, lft + 10, top + 2, lft + 10, top + 7);
-                break;
-
-            default:
-                g->FillRectangle(brh, lft, top, 9, 2);
-                g->DrawRectangle(this->pen, lft, top + 2, 8, 6);
-                break;
-            }
-        }
-
-    public:
-        void SetParentForm(Form ^ tarForm)
-        {
-            this->targetForm = tarForm;
-        }
+    internal:
+        /// <summary>親のウィンドウを保存する。</summary>
+        /// <param name="tarForm">親ウィンドウ。</param>
+        void SetParentForm(Form ^ tarForm);
     };
 
+    #pragma endregion
+
+    #pragma region "「閉じる」ボタン"
+
+    /// <summary>「閉じる」ボタン。</summary>
     ref class CloseButton
         : CustomDrawButton
     {
     private:
+        // 描画ペン
         Pen ^ pen;
 
     public:
-        CloseButton()
-        {
-            this->pen = gcnew Pen(Color::Black, 2);
-        }
+        /// <summary>コンストラクタ。</summary>
+        CloseButton();
 
-        ~CloseButton()
-        {
-            if (this->pen != nullptr) {
-                delete this->pen;
-                this->pen = nullptr;
-            }
-        }
+        /// <summary>デストラクタ。</summary>
+        ~CloseButton();
 
     public:
          /// <summary>アイコンの大きさを取得する。</summary>
@@ -595,18 +357,9 @@ namespace Dwm
         /// <param name="brh">描画ブラシ。</param>
         /// <param name="lft">左。</param>
         /// <param name="top">上。</param>
-        void DrawMethod(Graphics ^ g, SolidBrush ^ brh, int lft, int top) override
-        {
-            g->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
-
-            float scale = g->DpiX / 96.0f;
-            g->ScaleTransform(scale, scale);
-
-            System::Drawing::Rectangle rec = this->ClientRectangle;
-            this->pen->Color = brh->Color;
-            g->DrawLine(this->pen, lft, top, lft + 8, top + 8);
-            g->DrawLine(this->pen, lft, top + 8, lft + 8, top);
-        }
+        void DrawMethod(Graphics ^ g, SolidBrush ^ brh, int lft, int top) override;
     };
+
+    #pragma endregion
 }
 
