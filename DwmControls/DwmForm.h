@@ -21,6 +21,11 @@ namespace Dwm
 	{
     public:
         static const int BAR_PIXEL = 5;
+
+        static const int BTN_WIDTH = 28;
+
+        static const int BTN_HEIGHT = 24;
+
     private: Dwm::CloseButton^  closeBtn;
     private: Dwm::MaximumButton^  maximumBtn;
     private: Dwm::MinimumButton^  minimumBtn;
@@ -117,13 +122,15 @@ namespace Dwm
             // closeBtn
             // 
             this->closeBtn->DialogResult = System::Windows::Forms::DialogResult::None;
-            this->closeBtn->EnableColor = System::Drawing::Color::DimGray;
-            this->closeBtn->FocusColor = System::Drawing::Color::WhiteSmoke;
-            this->closeBtn->HoverColor = System::Drawing::Color::Crimson;
+            this->closeBtn->EnableColor = System::Drawing::Color::Black;
+            this->closeBtn->FocusColor = System::Drawing::Color::Transparent;
+            this->closeBtn->HoverBackColor = System::Drawing::Color::Crimson;
+            this->closeBtn->HoverFrontColor = System::Drawing::Color::White;
+            this->closeBtn->HoverColor = System::Drawing::Color::FromArgb(255, 232, 17, 35);
             this->closeBtn->Location = System::Drawing::Point(651, 2);
             this->closeBtn->Name = L"closeBtn";
             this->closeBtn->NotEnableColor = System::Drawing::Color::LightGray;
-            this->closeBtn->Size = System::Drawing::Size(28, 28);
+            this->closeBtn->Size = System::Drawing::Size(BTN_WIDTH, 32);
             this->closeBtn->TabIndex = 2;
             this->closeBtn->TabStop = false;
             this->closeBtn->Click += gcnew System::EventHandler(this, &DwmForm::closeBtn_Click);
@@ -131,13 +138,15 @@ namespace Dwm
             // maximumBtn
             // 
             this->maximumBtn->DialogResult = System::Windows::Forms::DialogResult::None;
-            this->maximumBtn->EnableColor = System::Drawing::Color::DimGray;
-            this->maximumBtn->FocusColor = System::Drawing::Color::WhiteSmoke;
+            this->maximumBtn->EnableColor = System::Drawing::Color::Black;
+            this->maximumBtn->FocusColor = System::Drawing::Color::Transparent;
             this->maximumBtn->HoverColor = System::Drawing::Color::LightGray;
+            this->maximumBtn->HoverBackColor = System::Drawing::Color::FromArgb(128, 32, 32, 32);
+            this->maximumBtn->HoverFrontColor = System::Drawing::Color::Black;
             this->maximumBtn->Location = System::Drawing::Point(617, 2);
             this->maximumBtn->Name = L"maximumBtn";
             this->maximumBtn->NotEnableColor = System::Drawing::Color::LightGray;
-            this->maximumBtn->Size = System::Drawing::Size(28, 28);
+            this->maximumBtn->Size = System::Drawing::Size(BTN_WIDTH, 32);
             this->maximumBtn->TabIndex = 1;
             this->maximumBtn->TabStop = false;
             this->maximumBtn->Click += gcnew System::EventHandler(this, &DwmForm::maximumBtn_Click);
@@ -145,13 +154,15 @@ namespace Dwm
             // minimumBtn
             // 
             this->minimumBtn->DialogResult = System::Windows::Forms::DialogResult::None;
-            this->minimumBtn->EnableColor = System::Drawing::Color::DimGray;
-            this->minimumBtn->FocusColor = System::Drawing::Color::WhiteSmoke;
+            this->minimumBtn->EnableColor = System::Drawing::Color::Black;
+            this->minimumBtn->FocusColor = System::Drawing::Color::Transparent;
             this->minimumBtn->HoverColor = System::Drawing::Color::LightGray;
+            this->minimumBtn->HoverBackColor = System::Drawing::Color::FromArgb(128, 32, 32, 32);
+            this->minimumBtn->HoverFrontColor = System::Drawing::Color::Black;
             this->minimumBtn->Location = System::Drawing::Point(583, 2);
             this->minimumBtn->Name = L"minimumBtn";
             this->minimumBtn->NotEnableColor = System::Drawing::Color::LightGray;
-            this->minimumBtn->Size = System::Drawing::Size(28, 28);
+            this->minimumBtn->Size = System::Drawing::Size(BTN_WIDTH, 32);
             this->minimumBtn->TabIndex = 0;
             this->minimumBtn->TabStop = false;
             this->minimumBtn->Click += gcnew System::EventHandler(this, &DwmForm::minimumBtn_Click);
@@ -317,18 +328,22 @@ namespace Dwm
 
         virtual void OnShown(EventArgs ^ e) override
         {
-            this->minimumBtn->Location = Point(this->Width - 88, 5);
-            this->maximumBtn->Location = Point(this->Width - 58, 5);
-            this->closeBtn->Location = Point(this->Width - 28, 5);
+            this->closeBtn->Size = System::Drawing::Size(BTN_WIDTH, BTN_HEIGHT);
+            this->maximumBtn->Size = System::Drawing::Size(BTN_WIDTH, BTN_HEIGHT);
+            this->minimumBtn->Size = System::Drawing::Size(BTN_WIDTH, BTN_HEIGHT);
+
+            this->minimumBtn->Location = Point(this->Width - BTN_WIDTH * 3, 0);
+            this->maximumBtn->Location = Point(this->Width - BTN_WIDTH * 2, 0);
+            this->closeBtn->Location = Point(this->Width - BTN_WIDTH, 0);
         }
 
         FormWindowState prevState;
 
         virtual void OnSizeChanged(EventArgs ^ e) override
         {
-            this->minimumBtn->Location = Point(this->Width - 88, 5);
-            this->maximumBtn->Location = Point(this->Width - 58, 5);
-            this->closeBtn->Location = Point(this->Width - 28, 5);
+            this->minimumBtn->Location = Point(this->Width - BTN_WIDTH * 3, 0);
+            this->maximumBtn->Location = Point(this->Width - BTN_WIDTH * 2, 0);
+            this->closeBtn->Location = Point(this->Width - BTN_WIDTH, 0);
 
             if (this->Location.X < -10000 ||
                 this->Location.Y < -10000) {

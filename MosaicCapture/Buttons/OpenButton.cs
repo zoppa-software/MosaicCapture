@@ -21,7 +21,7 @@ namespace MosaicCapture.Buttons
 
         protected override void DrawMethod(Graphics g, SolidBrush brh, int lft, int top)
         {
-            g.DrawImage(this.image, 0, 3, this.image.Width, this.image.Height);
+            g.DrawImage(this.image, 0, 0, this.image.Width, this.image.Height);
         }
     }
 }

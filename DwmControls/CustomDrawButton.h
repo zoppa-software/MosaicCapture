@@ -25,6 +25,12 @@ namespace Dwm
         /// <summary>無効状態ブラシ。</summary>
         SolidBrush ^ notEnableColor;
 
+        /// <summary>ホバー時の前景ブラシ。</summary>
+        SolidBrush ^ hoverFrontColor;
+
+        /// <summary>ホバー時の背景ブラシ。</summary>
+        SolidBrush ^ hoverBackColor;
+
         /// <summary>フォーカス色ブラシ。</summary>
         Pen ^ focusColorPen;
 
@@ -84,6 +90,34 @@ namespace Dwm
             }
         }
 
+        /// <summary>マウスホバー時の前景色を設定、取得する。</summary>
+        /// <value>Color値。</value>
+        [Category("表示")]
+        [Description("マウスホバー時の前景色を設定、取得する")]
+        property Color HoverFrontColor
+        {
+            Color get() {
+                return this->hoverFrontColor->Color;
+            }
+            void set(Color value) {
+                this->hoverFrontColor->Color = value;
+            }
+        }
+
+        /// <summary>マウスホバー時の背景色を設定、取得する。</summary>
+        /// <value>Color値。</value>
+        [Category("表示")]
+        [Description("マウスホバー時の背景色を設定、取得する")]
+        property Color HoverBackColor
+        {
+            Color get() {
+                return this->hoverBackColor->Color;
+            }
+            void set(Color value) {
+                this->hoverBackColor->Color = value;
+            }
+        }
+
         /// <summary>マウスフォーカス枠の色を設定、取得する。</summary>
         /// <value>Color値。</value>
         [Category("表示")]
@@ -137,6 +171,8 @@ namespace Dwm
             this->notEnableColor = gcnew SolidBrush(Color::LightGray);
             this->focusColorPen = gcnew Pen(Color::DimGray);
             this->hoverColorPen = gcnew Pen(Color::LightGray, 1);
+            this->hoverBackColor = gcnew SolidBrush(Color::FromArgb(128, 255, 255, 255));
+            this->hoverFrontColor = gcnew SolidBrush(Color::DimGray);
             this->hover = false;
             this->DialogResult = System::Windows::Forms::DialogResult::None;
 
@@ -164,6 +200,14 @@ namespace Dwm
             if (this->hoverColorPen != nullptr) {
                 delete this->hoverColorPen;
                 this->hoverColorPen = nullptr;
+            }
+            if (this->hoverFrontColor != nullptr) {
+                delete this->hoverFrontColor;
+                this->hoverFrontColor = nullptr;
+            }
+            if (this->hoverBackColor != nullptr) {
+                delete this->hoverBackColor;
+                this->hoverBackColor = nullptr;
             }
         }
 
@@ -206,6 +250,12 @@ namespace Dwm
             Control::OnPaintBackground(pevent);
         }
 
+        void OnSizeChanged(EventArgs ^ e) override
+        {
+            int a = 50;
+            Control::OnSizeChanged(e);
+        }
+
         /// <summary>描画イベントハンドラ。</summary>
         /// <param name="e">イベントオブジェクト。</param>
         /// <remarks>
@@ -218,9 +268,20 @@ namespace Dwm
             Graphics ^ g = e->Graphics;
 
             // 有効、無効カラーを設定
-            SolidBrush ^ brh = (this->Enabled ? this->enableColor : this->notEnableColor);
+            SolidBrush ^ brh;
+            if (this->Enabled) {
+                brh = (this->hover ? this->hoverFrontColor : this->enableColor);
+            }
+            else {
+                brh = this->notEnableColor;
+            }
             int lft = (this->ClientRectangle.Width - this->SquareLength) / 2;
             int top = (this->ClientRectangle.Height - this->SquareLength) / 2;
+
+            // ホバー時背景を描画する
+            if (this->hover) {
+                g->FillRectangle(this->hoverBackColor, this->ClientRectangle);
+            }
 
             // アイコンを描画する
             this->DrawMethod(g, brh, lft, top);
@@ -406,7 +467,7 @@ namespace Dwm
         property int SquareLength 
         {
             int get() override {
-                return 28;
+                return 9;
             }
         }
 
@@ -418,12 +479,12 @@ namespace Dwm
         /// <param name="top">上。</param>
         void DrawMethod(Graphics ^ g, SolidBrush ^ brh, int lft, int top) override
         {
-            g->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
+            g->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::None;
 
             float scale = g->DpiX / 96.0f;
             g->ScaleTransform(scale, scale);
 
-            g->FillRectangle(Brushes::Black, 3, 12, 10, 2);
+            g->FillRectangle(brh, lft, top + 7, 8, 3);
         }
     };
 
@@ -433,13 +494,29 @@ namespace Dwm
     private:
         Form ^ targetForm;
 
+        Pen ^ pen;
+
+    public:
+        MaximumButton()
+        {
+            this->pen = gcnew Pen(Color::Black, 1);
+        }
+
+        ~MaximumButton()
+        {
+            if (this->pen != nullptr) {
+                delete this->pen;
+                this->pen = nullptr;
+            }
+        }
+
     public:
          /// <summary>アイコンの大きさを取得する。</summary>
         [Browsable(false)]
         property int SquareLength 
         {
             int get() override {
-                return 28;
+                return 10;
             }
         }
 
@@ -451,25 +528,26 @@ namespace Dwm
         /// <param name="top">上。</param>
         void DrawMethod(Graphics ^ g, SolidBrush ^ brh, int lft, int top) override
         {
-            g->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
+            g->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::None;
 
             float scale = g->DpiX / 96.0f;
             g->ScaleTransform(scale, scale);
 
             FormWindowState state = this->targetForm != nullptr ? this->targetForm->WindowState : FormWindowState::Normal;
+            this->pen->Color = brh->Color;
             switch (state)
             {
             case FormWindowState::Maximized:
-                g->FillRectangle(Brushes::Black, 2, 6, 9, 2);
-                g->DrawRectangle(Pens::Black, 2, 7, 9, 7);
+                g->FillRectangle(brh, lft, top + 3, 9, 2);
+                g->DrawRectangle(this->pen, lft, top + 5, 8, 5);
 
-                g->FillRectangle(Brushes::Black, 5, 2, 9, 2);
-                g->DrawLine(Pens::Black, 14, 4, 14, 11);
+                g->FillRectangle(brh, lft + 2, top, 9, 2);
+                g->DrawLine(this->pen, lft + 10, top + 2, lft + 10, top + 7);
                 break;
 
             default:
-                g->FillRectangle(Brushes::Black, 2, 3, 12, 4);
-                g->DrawRectangle(Pens::Black, 2, 7, 12, 7);
+                g->FillRectangle(brh, lft, top, 9, 2);
+                g->DrawRectangle(this->pen, lft, top + 2, 8, 6);
                 break;
             }
         }
@@ -507,7 +585,7 @@ namespace Dwm
         property int SquareLength 
         {
             int get() override {
-                return 28;
+                return 9;
             }
         }
 
@@ -524,8 +602,10 @@ namespace Dwm
             float scale = g->DpiX / 96.0f;
             g->ScaleTransform(scale, scale);
 
-            g->DrawLine(this->pen, 3, 3, 13, 13);
-            g->DrawLine(this->pen, 3, 13, 13, 3);
+            System::Drawing::Rectangle rec = this->ClientRectangle;
+            this->pen->Color = brh->Color;
+            g->DrawLine(this->pen, lft, top, lft + 8, top + 8);
+            g->DrawLine(this->pen, lft, top + 8, lft + 8, top);
         }
     };
 }

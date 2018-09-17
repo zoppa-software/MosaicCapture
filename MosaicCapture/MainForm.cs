@@ -66,10 +66,6 @@ namespace MosaicCapture
         {
             InitializeComponent();
 
-            //if (DwmApi.DwmIsCompositionEnabled()) {
-            //    DwmApi.DwmExtendFrameIntoClientArea(this.Handle, 3, 3, 30, 20);
-            //}
-
             this.scrollBarSmallChange = 1;
             this.clickPos = new Point(-1, -1);
             this.zoom = 100;
@@ -430,6 +426,11 @@ namespace MosaicCapture
 
         private void clipBtn_Click(object sender, EventArgs e)
         {
+            this.SetModifiImage();
+        }
+
+        private void SetModifiImage()
+        {
             try {
                 // クリップボードの画像を取得する
                 var bitmap = this.ReadClipBoard();
@@ -596,6 +597,48 @@ namespace MosaicCapture
             this.tileMinusBtn.Enabled = true;
             this.tilePlusBtn.Enabled = (this.szindex < mosaicTile.Length - 1);
             this.Invalidate(new Rectangle(0, this.Height - 30, this.Width, 30));
+        }
+
+        private void mainControl_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control) {
+                if (e.KeyCode == Keys.V) {
+                    this.SetModifiImage();
+                }
+                else if (e.KeyCode == Keys.C) {
+                    if (this.mosaicBitmap?.Source != null) {
+                        Clipboard.SetImage(this.mosaicBitmap.Source);
+                    }
+                }
+            }
+        }
+
+        private void mainControl_DragEnter(object sender, DragEventArgs e)
+        {
+            //コントロール内にドラッグされたとき実行される
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                //ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
+                e.Effect = DragDropEffects.Copy;
+            else
+                //ファイル以外は受け付けない
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void mainControl_DragDrop(object sender, DragEventArgs e)
+        {
+            var fileName = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            if (fileName.Length > 0 && System.IO.File.Exists(fileName[0])) {
+                try {
+                    var bitmap = new Bitmap(fileName[0]);
+                    this.mainControl.Remove(BITMAP_NAME);
+                    this.mosaicBitmap = this.mainControl.CreateBitmap(BITMAP_NAME, bitmap);
+                    this.mainControl.Rebuild();
+                    this.CalcScrollBar();
+                }
+                catch (Exception ex) {
+                    MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }
